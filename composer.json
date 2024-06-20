@@ -1,5 +1,5 @@
 {
-    "name": "gilsegura/shared-bundle",
+    "name": "meetingdoctors/shared-bundle",
     "description": "This is a bundle integrating the [shared](https://github.com/gilsegura/shared) library into Symfony applications.",
     "type": "symfony-bundle",
     "license": "MIT",
