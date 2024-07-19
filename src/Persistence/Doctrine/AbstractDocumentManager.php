@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SharedBundle\Persistence\Doctrine;
 
 use Doctrine\Common\Collections\Selectable;
-use Doctrine\DBAL\Exception\ConstraintViolationException;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
-use Doctrine\ORM\Exception\ORMException;
+use InvalidArgumentException;
 use Shared\Criteria;
 use SharedBundle\Criteria\CriteriaConverterException;
 
@@ -51,8 +51,8 @@ abstract readonly class AbstractDocumentManager
     }
 
     /**
-     * @throws ConstraintViolationException
-     * @throws ORMException
+     * @throws InvalidArgumentException
+     * @throws MongoDBException
      */
     final protected function register(object $model): void
     {
@@ -61,7 +61,8 @@ abstract readonly class AbstractDocumentManager
     }
 
     /**
-     * @throws ORMException
+     * @throws InvalidArgumentException
+     * @throws MongoDBException
      */
     final protected function unregister(object $model): void
     {
@@ -70,7 +71,7 @@ abstract readonly class AbstractDocumentManager
     }
 
     /**
-     * @throws ORMException
+     * @throws MongoDBException
      */
     private function apply(): void
     {
