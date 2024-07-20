@@ -43,6 +43,10 @@
             <argument>%env(MESSENGER_TRANSPORT_DSN)%</argument>
         </service>
 
+        <service id="SharedBundle\MongoDB\MongoDBHealthyConnection">
+            <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
+        </service>
+
         <service id="SharedBundle\UI\Http\Rest\EventSubscriber\ExceptionSubscriber">
             <argument>%env(APP_DEBUG)%</argument>
             <argument type="service" id="SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping"/>
@@ -75,6 +79,10 @@
 
             <service id="SharedBundle\AMQP\AMQPHealthyConnection" public="true">
                 <argument>%env(MESSENGER_TRANSPORT_DSN)%</argument>
+            </service>
+
+            <service id="SharedBundle\MongoDB\MongoDBHealthyConnection">
+                <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
             </service>
 
             <service id="SharedBundle\CommandHandling\Testing\Command\ThrowableHandler">
