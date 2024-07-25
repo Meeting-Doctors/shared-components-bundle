@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace SharedBundle\Tests;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Shared\EventHandling\EventBusInterface;
 use SharedBundle\SharedBundle;
+use SharedBundle\Tests\Stubs\Testing\Command\AHandler as CommandAHandler;
+use SharedBundle\Tests\Stubs\Testing\Command\ThrowableHandler as CommandThrowableHandler;
+use SharedBundle\Tests\Stubs\Testing\Query\AHandler;
+use SharedBundle\Tests\Stubs\Testing\Query\AnotherHandler;
+use SharedBundle\Tests\Stubs\Testing\Query\ThrowableHandler;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 final class Kernel extends BaseKernel
@@ -56,6 +63,20 @@ final class Kernel extends BaseKernel
                     ->setSynthetic(true)
                     ->setPublic(true);
             }
+
+            $container->register('CommandThrowableHandler', CommandThrowableHandler::class)
+                ->addTag('messenger.message_handler', ['bus' => 'messenger.bus.command']);
+
+            $container->register('ACommandHandler', CommandAHandler::class)
+                ->addArgument(new Reference(EventBusInterface::class))
+                ->addTag('messenger.message_handler', ['bus' => 'messenger.bus.command']);
+
+            $container->register('QueryThrowableHandler', ThrowableHandler::class)
+                ->addTag('messenger.message_handler', ['bus' => 'messenger.bus.query']);
+            $container->register('AQueryHandler', AHandler::class)
+                ->addTag('messenger.message_handler', ['bus' => 'messenger.bus.query']);
+            $container->register('AnotherQueryHandler', AnotherHandler::class)
+                ->addTag('messenger.message_handler', ['bus' => 'messenger.bus.query']);
         });
     }
 }

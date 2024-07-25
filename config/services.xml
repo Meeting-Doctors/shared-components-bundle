@@ -84,27 +84,6 @@
             <service id="SharedBundle\MongoDB\MongoDBHealthyConnection">
                 <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
             </service>
-
-            <service id="SharedBundle\Tests\Stubs\Testing\Command\ThrowableHandler">
-                <tag name="messenger.message_handler" bus="messenger.bus.command"/>
-            </service>
-
-            <service id="SharedBundle\Tests\Stubs\Testing\Command\AHandler">
-                <argument type="service" id="Shared\EventHandling\EventBusInterface"/>
-                <tag name="messenger.message_handler" bus="messenger.bus.command"/>
-            </service>
-
-            <service id="SharedBundle\Tests\Stubs\Testing\Query\ThrowableHandler">
-                <tag name="messenger.message_handler" bus="messenger.bus.query"/>
-            </service>
-
-            <service id="SharedBundle\Tests\Stubs\Testing\Query\AHandler">
-                <tag name="messenger.message_handler" bus="messenger.bus.query"/>
-            </service>
-
-            <service id="SharedBundle\Tests\Stubs\Testing\Query\AnotherHandler">
-                <tag name="messenger.message_handler" bus="messenger.bus.query"/>
-            </service>
         </services>
     </when>
 </container>
