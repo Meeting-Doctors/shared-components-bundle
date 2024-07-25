@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SharedBundle\EventHandling;
 
 use Shared\Domain\DomainEvent;
+use Shared\Domain\DomainEventStream;
+use Shared\EventHandling\EventBusInterface;
 use Shared\EventHandling\EventListenerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -16,7 +18,7 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventListen
     private array $events = [];
 
     public function __construct(
-        private readonly MessengerAsyncEventBus $bus
+        private readonly EventBusInterface $bus
     ) {
     }
 
@@ -38,9 +40,7 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventListen
             return;
         }
 
-        foreach ($this->events as $event) {
-            $this->bus->handle($event);
-        }
+        $this->bus->publish(new DomainEventStream(...$this->events));
     }
 
     #[\Override]

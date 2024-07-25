@@ -8,13 +8,11 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Shared\CommandHandling\CommandBusInterface;
 use Shared\CommandHandling\QueryBusInterface;
 use Shared\EventHandling\EventBusInterface;
-use Shared\EventHandling\SimpleEventBus;
 use Shared\EventSourcing\EventStreamDecoratorInterface;
 use Shared\EventStore\EventStoreInterface;
 use Shared\EventStore\EventStoreManagerInterface;
 use SharedBundle\DependencyInjection\SharedExtension;
 use SharedBundle\EventHandling\AsyncEventPublisher;
-use SharedBundle\EventHandling\MessengerAsyncEventBus;
 use SharedBundle\EventStore\DBALEventStore;
 
 final class PackagesSharedExtensionTest extends AbstractExtensionTestCase
@@ -29,13 +27,12 @@ final class PackagesSharedExtensionTest extends AbstractExtensionTestCase
 
     public function test_must_contains_services(): void
     {
-        $this->load([]);
+        $this->load();
 
-        self::assertContainerBuilderHasService(MessengerAsyncEventBus::class);
         self::assertContainerBuilderHasService(CommandBusInterface::class);
         self::assertContainerBuilderHasService(QueryBusInterface::class);
         self::assertContainerBuilderHasService(AsyncEventPublisher::class);
-        self::assertContainerBuilderHasService(EventBusInterface::class, SimpleEventBus::class);
+        self::assertContainerBuilderHasService(EventBusInterface::class);
         self::assertContainerBuilderHasService(EventStreamDecoratorInterface::class);
         self::assertContainerBuilderHasService(DBALEventStore::class);
         self::assertContainerBuilderHasService(EventStoreInterface::class);

@@ -5,7 +5,7 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <services>
-        <service id="SharedBundle\EventHandling\MessengerAsyncEventBus">
+        <service id="Shared\EventHandling\EventBusInterface" class="SharedBundle\EventHandling\MessengerEventBus">
             <argument type="service" id="messenger.bus.event.async"/>
         </service>
 
@@ -18,12 +18,10 @@
         </service>
 
         <service id="SharedBundle\EventHandling\AsyncEventPublisher">
-            <argument type="service" id="SharedBundle\EventHandling\MessengerAsyncEventBus"/>
+            <argument type="service" id="Shared\EventHandling\EventBusInterface"/>
             <tag name="packages.shared.event_handling.event_listener"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-
-        <service id="Shared\EventHandling\EventBusInterface" class="Shared\EventHandling\SimpleEventBus"/>
 
         <service id="Shared\EventSourcing\EventStreamDecoratorInterface" class="Shared\EventSourcing\MetadataEnricher\MetadataEnrichingEventStreamDecorator"/>
 

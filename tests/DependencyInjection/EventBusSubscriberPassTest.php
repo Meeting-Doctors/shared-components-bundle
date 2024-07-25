@@ -8,9 +8,9 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase
 use Shared\EventHandling\EventBusInterface;
 use Shared\EventHandling\EventListenerInterface;
 use SharedBundle\DependencyInjection\EventBusSubscriberPass;
+use SharedBundle\EventHandling\AsyncEventPublisher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 final class EventBusSubscriberPassTest extends AbstractCompilerPassTestCase
 {
@@ -43,10 +43,12 @@ final class EventBusSubscriberPassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        self::assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            EventBusInterface::class,
-            'subscribe',
-            [new Reference('event_listener')]
+        self::assertContainerBuilderHasServiceDefinitionWithTag(
+            'event_listener',
+            'messenger.message_handler',
+            [
+                'bus' => 'messenger.bus.event.async'
+            ]
         );
     }
 }

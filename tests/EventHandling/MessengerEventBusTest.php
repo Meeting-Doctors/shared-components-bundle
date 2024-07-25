@@ -6,17 +6,16 @@ namespace SharedBundle\Tests\EventHandling;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Shared\Domain\DomainEvent;
-use Shared\Domain\Metadata;
+use Shared\Domain\DomainEventStream;
 use Shared\Domain\Uuid;
-use SharedBundle\EventHandling\MessengerAsyncEventBus;
+use SharedBundle\EventHandling\MessengerEventBus;
 use SharedBundle\Tests\Stubs\DomainEventStub;
 use SharedBundle\Tests\Stubs\DomainMessageStubPayload;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class MessengerAsyncEventBusTest extends TestCase
+final class MessengerEventBusTest extends TestCase
 {
     public function test_must_throw_exception_when_handling_message(): void
     {
@@ -28,11 +27,13 @@ final class MessengerAsyncEventBusTest extends TestCase
             ->method('dispatch')
             ->willThrowException(new HandlerFailedException(new Envelope(new \stdClass()), [new \Exception()]));
 
-        $bus = new MessengerAsyncEventBus($messageBus);
+        $bus = new MessengerEventBus($messageBus);
 
-        $bus->handle(DomainEventStub::occur(
-            new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac'),
-            new DomainMessageStubPayload()
+        $bus->publish(new DomainEventStream(
+            DomainEventStub::occur(
+                new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac'),
+                new DomainMessageStubPayload()
+            )
         ));
     }
 }
