@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SharedBundle\Tests\UI\Http\Rest\Controller;
 
 use Shared\CommandHandling\CommandBusInterface;
-use SharedBundle\CommandHandling\Testing\Command\ACommand;
+use SharedBundle\Tests\Stubs\Testing\Command\ACommand;
 use SharedBundle\UI\Http\Rest\Controller\AbstractCommandController;
 use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;

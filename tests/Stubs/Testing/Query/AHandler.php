@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SharedBundle\CommandHandling\Testing\Query;
+namespace SharedBundle\Tests\Stubs\Testing\Query;
 
 use Shared\CommandHandling\Collection;
 use Shared\CommandHandling\PageNotFoundException;

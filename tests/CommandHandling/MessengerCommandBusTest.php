@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SharedBundle\Tests\CommandHandling;
 
-use SharedBundle\CommandHandling\Testing\Command\ACommand;
-use SharedBundle\CommandHandling\Testing\Command\ThrowableCommand;
+use SharedBundle\Tests\Stubs\Testing\Command\ACommand;
+use SharedBundle\Tests\Stubs\Testing\Command\ThrowableCommand;
 
 final class MessengerCommandBusTest extends AbstractApplicationTestCase
 {

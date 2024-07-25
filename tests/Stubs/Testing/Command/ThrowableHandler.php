@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SharedBundle\CommandHandling\Testing\Command;
+namespace SharedBundle\Tests\Stubs\Testing\Command;
 
 use Shared\CommandHandling\CommandHandlerInterface;
 

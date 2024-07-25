@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SharedBundle\EventHandling;
 
-use Shared\Domain\DomainMessage;
+use Shared\Domain\DomainEvent;
 use SharedBundle\Exception\MessageBusExceptionTrait;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -22,11 +22,11 @@ final readonly class MessengerAsyncEventBus
     /**
      * @throws \Throwable
      */
-    public function handle(DomainMessage $message): void
+    public function handle(DomainEvent $event): void
     {
         try {
-            $this->messageBus->dispatch($message, [
-                new AmqpStamp($message->type),
+            $this->messageBus->dispatch($event, [
+                new AmqpStamp($event::class),
             ]);
         } catch (HandlerFailedException $handlerFailedException) {
             $this->throwException($handlerFailedException);

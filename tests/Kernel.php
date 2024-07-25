@@ -32,9 +32,9 @@ final class Kernel extends BaseKernel
         $loader->load(static function (ContainerBuilder $container) {
             $container->loadFromExtension('doctrine', [
                 'dbal' => [
-                    'driver' => 'pdo_sqlite',
+                    'driver' => 'pdo_mysql',
                     'charset' => 'utf8mb4',
-                    'url' => 'sqlite:///:memory:',
+                    'url' => getenv('DATABASE_URL'),
                 ],
                 'orm' => [
                     'auto_generate_proxy_classes' => true,

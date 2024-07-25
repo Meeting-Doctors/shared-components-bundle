@@ -8,6 +8,7 @@ use SharedBundle\DBAL\Types\DateTimeImmutableType;
 use SharedBundle\DBAL\Types\EmailType;
 use SharedBundle\DBAL\Types\HashedPasswordType;
 use SharedBundle\DBAL\Types\NotEmptyStringType;
+use SharedBundle\DBAL\Types\PlayHeadType;
 use SharedBundle\DBAL\Types\SerializableType;
 use SharedBundle\DBAL\Types\UuidType;
 use Symfony\Component\Config\FileLocator;
@@ -44,6 +45,7 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
                     NotEmptyStringType::NAME => NotEmptyStringType::class,
                     SerializableType::NAME => SerializableType::class,
                     UuidType::NAME => UuidType::class,
+                    PlayHeadType::NAME => PlayHeadType::class,
                 ],
             ],
         ]);

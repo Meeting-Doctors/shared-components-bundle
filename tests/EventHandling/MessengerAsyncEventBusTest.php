@@ -6,11 +6,12 @@ namespace SharedBundle\Tests\EventHandling;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Shared\Domain\DomainEventInterface;
-use Shared\Domain\DomainMessage;
+use Shared\Domain\DomainEvent;
 use Shared\Domain\Metadata;
 use Shared\Domain\Uuid;
 use SharedBundle\EventHandling\MessengerAsyncEventBus;
+use SharedBundle\Tests\Stubs\DomainEventStub;
+use SharedBundle\Tests\Stubs\DomainMessageStubPayload;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -29,26 +30,9 @@ final class MessengerAsyncEventBusTest extends TestCase
 
         $bus = new MessengerAsyncEventBus($messageBus);
 
-        $bus->handle(DomainMessage::record(
+        $bus->handle(DomainEventStub::occur(
             new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac'),
-            0,
-            Metadata::empty(),
-            new AsyncEventWasOccurred()
+            new DomainMessageStubPayload()
         ));
-    }
-}
-
-final readonly class AsyncEventWasOccurred implements DomainEventInterface
-{
-    #[\Override]
-    public static function deserialize(array $data): self
-    {
-        return new self();
-    }
-
-    #[\Override]
-    public function serialize(): array
-    {
-        return [];
     }
 }

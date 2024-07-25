@@ -6,7 +6,7 @@ namespace SharedBundle\Tests\UI\Http\Rest\Controller;
 
 use Shared\CommandHandling\Collection;
 use Shared\CommandHandling\QueryBusInterface;
-use SharedBundle\CommandHandling\Testing\Query\AQuery;
+use SharedBundle\Tests\Stubs\Testing\Query\AQuery;
 use SharedBundle\UI\Http\Rest\Controller\AbstractQueryController;
 use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;

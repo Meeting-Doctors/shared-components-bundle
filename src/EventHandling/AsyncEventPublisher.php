@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SharedBundle\EventHandling;
 
-use Shared\Domain\DomainMessage;
+use Shared\Domain\DomainEvent;
 use Shared\EventHandling\EventListenerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -12,8 +12,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class AsyncEventPublisher implements EventSubscriberInterface, EventListenerInterface
 {
-    /** @var DomainMessage[] */
-    private array $messages = [];
+    /** @var DomainEvent[] */
+    private array $events = [];
 
     public function __construct(
         private readonly MessengerAsyncEventBus $bus
@@ -34,18 +34,18 @@ final class AsyncEventPublisher implements EventSubscriberInterface, EventListen
      */
     public function publish(): void
     {
-        if ([] === $this->messages) {
+        if ([] === $this->events) {
             return;
         }
 
-        foreach ($this->messages as $message) {
-            $this->bus->handle($message);
+        foreach ($this->events as $event) {
+            $this->bus->handle($event);
         }
     }
 
     #[\Override]
-    public function handle(DomainMessage $message): void
+    public function handle(DomainEvent $event): void
     {
-        $this->messages[] = $message;
+        $this->events[] = $event;
     }
 }

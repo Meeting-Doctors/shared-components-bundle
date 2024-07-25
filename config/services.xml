@@ -28,7 +28,7 @@
         <service id="Shared\EventSourcing\EventStreamDecoratorInterface" class="Shared\EventSourcing\MetadataEnricher\MetadataEnrichingEventStreamDecorator"/>
 
         <service id="SharedBundle\EventStore\DBALEventStore">
-            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument type="service" id="doctrine.dbal.default_connection"/>
         </service>
 
         <service id="Shared\EventStore\EventStoreInterface" alias="SharedBundle\EventStore\DBALEventStore"/>
@@ -70,7 +70,7 @@
             </service>
 
             <service id="SharedBundle\EventStore\DBALEventStore" public="true">
-                <argument type="service" id="doctrine.orm.default_entity_manager"/>
+                <argument type="service" id="doctrine.dbal.default_connection"/>
             </service>
 
             <service id="SharedBundle\DBAL\DBALHealthyConnection" public="true">
@@ -85,24 +85,24 @@
                 <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
             </service>
 
-            <service id="SharedBundle\CommandHandling\Testing\Command\ThrowableHandler">
+            <service id="SharedBundle\Tests\Stubs\Testing\Command\ThrowableHandler">
                 <tag name="messenger.message_handler" bus="messenger.bus.command"/>
             </service>
 
-            <service id="SharedBundle\CommandHandling\Testing\Command\AHandler">
+            <service id="SharedBundle\Tests\Stubs\Testing\Command\AHandler">
                 <argument type="service" id="Shared\EventHandling\EventBusInterface"/>
                 <tag name="messenger.message_handler" bus="messenger.bus.command"/>
             </service>
 
-            <service id="SharedBundle\CommandHandling\Testing\Query\ThrowableHandler">
+            <service id="SharedBundle\Tests\Stubs\Testing\Query\ThrowableHandler">
                 <tag name="messenger.message_handler" bus="messenger.bus.query"/>
             </service>
 
-            <service id="SharedBundle\CommandHandling\Testing\Query\AHandler">
+            <service id="SharedBundle\Tests\Stubs\Testing\Query\AHandler">
                 <tag name="messenger.message_handler" bus="messenger.bus.query"/>
             </service>
 
-            <service id="SharedBundle\CommandHandling\Testing\Query\AnotherHandler">
+            <service id="SharedBundle\Tests\Stubs\Testing\Query\AnotherHandler">
                 <tag name="messenger.message_handler" bus="messenger.bus.query"/>
             </service>
         </services>

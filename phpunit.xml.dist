@@ -19,7 +19,7 @@
     <env name="MESSENGER_TRANSPORT_DSN" value="amqp://"/>
   </php>
   <testsuites>
-    <testsuite name="Project Test Suite">
+    <testsuite name="tests">
       <directory>./tests/</directory>
     </testsuite>
   </testsuites>

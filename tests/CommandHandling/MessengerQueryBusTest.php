@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SharedBundle\Tests\CommandHandling;
 
 use Shared\CommandHandling\Collection;
-use SharedBundle\CommandHandling\Testing\Query\AQuery;
-use SharedBundle\CommandHandling\Testing\Query\ThrowableQuery;
+use SharedBundle\Tests\Stubs\Testing\Query\AQuery;
+use SharedBundle\Tests\Stubs\Testing\Query\ThrowableQuery;
 
 final class MessengerQueryBusTest extends AbstractApplicationTestCase
 {
