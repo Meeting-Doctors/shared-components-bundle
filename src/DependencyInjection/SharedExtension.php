@@ -60,6 +60,7 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
                     'messenger.bus.command' => [
                         'default-middleware' => false,
                         'middleware' => [
+                            'dispatch_after_current_bus',
                             'doctrine_transaction',
                             'handle_message',
                         ],
@@ -71,7 +72,10 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
                         ],
                     ],
                     'messenger.bus.event.async' => [
-                        'default-middleware' => 'allow_no_handlers',
+                        'default-middleware' => [
+                            'enabled' => true,
+                            'allow_no_handlers' => true,
+                        ],
                     ],
                 ],
             ],
