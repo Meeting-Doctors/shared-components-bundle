@@ -8,7 +8,6 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase
 use Shared\EventHandling\EventBusInterface;
 use Shared\EventHandling\EventListenerInterface;
 use SharedBundle\DependencyInjection\EventBusSubscriberPass;
-use SharedBundle\EventHandling\AsyncEventPublisher;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -47,7 +46,7 @@ final class EventBusSubscriberPassTest extends AbstractCompilerPassTestCase
             'event_listener',
             'messenger.message_handler',
             [
-                'bus' => 'messenger.bus.event.async'
+                'bus' => 'messenger.bus.event.async',
             ]
         );
     }

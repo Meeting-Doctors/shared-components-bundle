@@ -23,7 +23,7 @@ final readonly class MessengerEventBus implements EventBusInterface
     {
         foreach ($stream->events as $event) {
             $this->eventBus->dispatch($event, [
-                new AmqpStamp(strtr($event::class, '\\', '.'))
+                new AmqpStamp(strtr($event::class, '\\', '.')),
             ]);
         }
     }

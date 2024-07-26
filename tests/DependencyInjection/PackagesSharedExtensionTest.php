@@ -12,7 +12,6 @@ use Shared\EventSourcing\EventStreamDecoratorInterface;
 use Shared\EventStore\EventStoreInterface;
 use Shared\EventStore\EventStoreManagerInterface;
 use SharedBundle\DependencyInjection\SharedExtension;
-use SharedBundle\EventHandling\AsyncEventPublisher;
 use SharedBundle\EventStore\DBALEventStore;
 
 final class PackagesSharedExtensionTest extends AbstractExtensionTestCase
@@ -31,7 +30,6 @@ final class PackagesSharedExtensionTest extends AbstractExtensionTestCase
 
         self::assertContainerBuilderHasService(CommandBusInterface::class);
         self::assertContainerBuilderHasService(QueryBusInterface::class);
-        self::assertContainerBuilderHasService(AsyncEventPublisher::class);
         self::assertContainerBuilderHasService(EventBusInterface::class);
         self::assertContainerBuilderHasService(EventStreamDecoratorInterface::class);
         self::assertContainerBuilderHasService(DBALEventStore::class);

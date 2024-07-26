@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace SharedBundle\Tests\EventStore;
 
-use Shared\Criteria;
-use Shared\Domain\DomainEventStream;
 use Shared\Domain\DomainEvent;
-use Shared\Domain\Email;
-use Shared\Domain\NotEmptyString;
+use Shared\Domain\DomainEventStream;
 use Shared\Domain\Uuid;
 use Shared\EventStore\CallableEventVisitor;
 use Shared\EventStore\DomainEventStreamNotFoundException;
 use Shared\EventStore\EventStoreInterface;
+use Shared\EventStore\EventStoreManagerInterface;
 use Shared\EventStore\PlayheadAlreadyExistsException;
 use SharedBundle\EventStore\DBALEventStore;
 use SharedBundle\Tests\Stubs\DomainEventStub;
@@ -24,10 +22,9 @@ use Symfony\Component\Console\Output\NullOutput;
 
 final class DBALEventStoreTest extends KernelTestCase
 {
-    protected EventStoreInterface $eventStore;
+    protected EventStoreInterface&EventStoreManagerInterface $eventStore;
 
     /**
-     * @return void
      * @throws \Symfony\Component\Console\Exception\ExceptionInterface
      */
     public function createDatabaseSchema(): void
@@ -37,7 +34,7 @@ final class DBALEventStoreTest extends KernelTestCase
         $application->get('dbal:run-sql')
             ->run(
                 new ArrayInput([
-                    'sql' => DBALEventStore::TABLE_SCHEMA
+                    'sql' => DBALEventStore::TABLE_SCHEMA,
                 ]),
                 new NullOutput()
             );
@@ -94,7 +91,7 @@ final class DBALEventStoreTest extends KernelTestCase
             new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac'),
             new DomainMessageStubPayload()
         )));
-        //var_dump($this->eventStore->load(new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac')));die;
+        // var_dump($this->eventStore->load(new Uuid('9db0db88-3e44-4d2b-b46f-9ca547de06ac')));die;
     }
 
     public function test_must_load_stream_from_id(): void

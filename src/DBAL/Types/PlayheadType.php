@@ -6,12 +6,10 @@ namespace SharedBundle\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\GuidType;
 use Doctrine\DBAL\Types\IntegerType;
-use Shared\Domain\PlayHead;
-use Shared\Domain\Uuid;
+use Shared\Domain\Playhead;
 
-final class PlayHeadType extends IntegerType
+final class PlayheadType extends IntegerType
 {
     public const string NAME = 'playhead';
 
@@ -22,7 +20,7 @@ final class PlayHeadType extends IntegerType
             return $value;
         }
 
-        if ($value instanceof PlayHead) {
+        if ($value instanceof Playhead) {
             return $value->value;
         }
 
@@ -30,14 +28,14 @@ final class PlayHeadType extends IntegerType
     }
 
     #[\Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?PlayHead
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Playhead
     {
-        if (null === $value || $value instanceof PlayHead) {
+        if (null === $value || $value instanceof Playhead) {
             return $value;
         }
 
         try {
-            return new PlayHead($value);
+            return new Playhead($value);
         } catch (\Throwable) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }

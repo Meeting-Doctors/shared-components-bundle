@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace SharedBundle\EventStore;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConstraintViolationException;
 use Doctrine\DBAL\Exception as DBALException;
-use Doctrine\DBAL\Query\Expression\CompositeExpression;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Exception\ConstraintViolationException;
 use Doctrine\DBAL\Types\Types;
-use Shared\Criteria;
 use Shared\Domain\DateTimeImmutable;
 use Shared\Domain\DomainEvent;
 use Shared\Domain\DomainEventStream;
-use Shared\Domain\PlayHead;
+use Shared\Domain\Playhead;
 use Shared\Domain\Uuid;
 use Shared\EventStore\DomainEventStreamNotFoundException;
 use Shared\EventStore\EventStoreException;
@@ -24,12 +21,11 @@ use Shared\EventStore\EventVisitorInterface;
 use Shared\EventStore\PlayheadAlreadyExistsException;
 use Shared\Serializer\Serializer;
 use SharedBundle\Criteria\CriteriaConverterException;
-use SharedBundle\Persistence\Doctrine\DoctrineCriteriaConverter;
 
 final readonly class DBALEventStore implements EventStoreInterface, EventStoreManagerInterface
 {
     public const string TABLE_NAME = 'domain_events';
-    public const string TABLE_SCHEMA = 'CREATE TABLE IF NOT EXISTS `' . self::TABLE_NAME . '` (
+    public const string TABLE_SCHEMA = 'CREATE TABLE IF NOT EXISTS `'.self::TABLE_NAME.'` (
         `id` VARCHAR(36) NOT NULL COLLATE utf8mb4_general_ci,
         `aggregate_id` VARCHAR(36) NOT NULL COLLATE utf8mb4_general_ci,
         `playhead` INT(10) UNSIGNED NOT NULL,
@@ -46,18 +42,18 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
     ENGINE=InnoDB;
 ';
     private const string SQL_GET = 'SELECT * 
-        FROM `' . self::TABLE_NAME . '`
+        FROM `'.self::TABLE_NAME.'`
         WHERE (`aggregate_id` = :aggregate_id)
         ORDER BY `playhead` ASC
 ';
-    const SQL_GET_WITH_PLAYHEAD = 'SELECT * 
-        FROM `' . self::TABLE_NAME . '`
+    public const SQL_GET_WITH_PLAYHEAD = 'SELECT * 
+        FROM `'.self::TABLE_NAME.'`
         WHERE (`aggregate_id` = :aggregate_id)
         AND (`playhead` >= :playhead)
         ORDER BY `playhead` ASC
 ';
 
-    public function __construct(private readonly Connection $connection)
+    public function __construct(private Connection $connection)
     {
     }
 
@@ -107,7 +103,7 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
                         'payload' => json_encode(Serializer::serialize($event->payload()), JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION),
                         'playhead' => $event->playHead()->value,
                         'metadata' => json_encode(Serializer::serialize($event->metadata()), JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION),
-                        'recorded_at' => $event->recordedAt()->dateTime
+                        'recorded_at' => $event->recordedAt()->dateTime,
                     ],
                 );
             } catch (ConstraintViolationException) {
@@ -133,12 +129,6 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
                 'aggregate_id' => Types::STRING,
             ]
         );
-        /*
-        $events = $this->search(
-            $criteria,
-            new Criteria\OrderX(new Criteria\ByPlayhead(Criteria\Expr\Order::ASC))
-        );
-        */
 
         foreach ($results as $data) {
             $event = $this->rowToDomainEvent($data);
@@ -172,14 +162,14 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
         return new DomainEventStream(...$events);
     }
 
-    function rowToDomainEvent(array $data): DomainEvent
+    public function rowToDomainEvent(array $data): DomainEvent
     {
         $class = $data['event_class'];
 
         return new $class(
             new Uuid($data['aggregate_id']),
             Serializer::deserialize(json_decode($data['payload'], true, 512, JSON_THROW_ON_ERROR)),
-            new PlayHead($data['playhead']),
+            new Playhead($data['playhead']),
             new DateTimeImmutable(date(DATE_ATOM, strtotime($data['recorded_at']))),
             Serializer::deserialize(json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR)),
             new Uuid($data['id']),

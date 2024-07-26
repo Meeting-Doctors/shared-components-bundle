@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SharedBundle\Tests\MongoDB;
 
-use Exception;
 use MongoDB\Client;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +37,7 @@ class MongoDBHealthyConnectionTest extends TestCase
         $this->client
             ->expects($this->once())
             ->method('listDatabases')
-            ->willThrowException(new Exception('Exception listDatabases'));
+            ->willThrowException(new \Exception('Exception listDatabases'));
 
         $result = $this->healthyConnection->isHealthy();
 
