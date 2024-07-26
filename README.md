@@ -10,12 +10,8 @@ This is a bundle integrating the [shared](https://github.com/gilsegura/shared) l
 ## Installation
 
 ```
-$ composer require gilsegura/shared-bundle
+$ composer require meetingdoctors/shared-components-bundle
 ```
-
-## Documentation
-
-The example project [can be found in the `gilsegura/shared-bundle-example` repository](https://github.com/gilsegura/shared-bundle-example).
 
 ## License
 

@@ -17,12 +17,6 @@
             <argument type="service" id="messenger.bus.query"/>
         </service>
 
-        <service id="SharedBundle\EventHandling\AsyncEventPublisher">
-            <argument type="service" id="Shared\EventHandling\EventBusInterface"/>
-            <tag name="packages.shared.event_handling.event_listener"/>
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
         <service id="Shared\EventSourcing\EventStreamDecoratorInterface" class="Shared\EventSourcing\MetadataEnricher\MetadataEnrichingEventStreamDecorator"/>
 
         <service id="SharedBundle\EventStore\DBALEventStore">

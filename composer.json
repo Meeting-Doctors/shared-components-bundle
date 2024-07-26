@@ -1,6 +1,6 @@
 {
     "name": "meetingdoctors/shared-bundle",
-    "description": "This is a bundle integrating the [shared](https://github.com/gilsegura/shared) library into Symfony applications.",
+    "description": "This is a bundle integrating the [shared-components](https://github.com/Meeting-Doctors/shared-components) library into Symfony applications.",
     "type": "symfony-bundle",
     "license": "MIT",
     "minimum-stability": "stable",
