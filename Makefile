@@ -6,7 +6,7 @@ dependencies:
 
 .PHONY: test
 test:
-	vendor/bin/phpunit --testdox --exclude-group=none --colors=always
+	tests/run.sh all
 
 .PHONY: php-cs-fixer
 php-cs-fixer:
