@@ -6,6 +6,7 @@ namespace SharedBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use SharedBundle\DependencyInjection\EventBusSubscriberPass;
+use SharedBundle\DependencyInjection\ExceptionToHttpStatusCodeStrategyPass;
 use SharedBundle\DependencyInjection\SharedExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -19,6 +20,7 @@ final class SharedBundle extends AbstractBundle
         parent::build($container);
 
         $container->addCompilerPass(new EventBusSubscriberPass());
+        $container->addCompilerPass(new ExceptionToHttpStatusCodeStrategyPass());
 
         $this->addRegisterMappingsPass($container);
     }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SharedBundle\Tests\UI\Http\Rest\Exception;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
+use SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping;
+use SharedBundle\UI\Http\Rest\Exception\Strategy\InvalidArgumentExceptionToHttpStatusCodeStrategy;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -13,19 +15,20 @@ final class ExceptionHttpStatusCodeMappingTest extends TestCase
 {
     public function test_must_register_an_exception(): void
     {
-        $expected = 555;
+        $expected = 400;
 
-        $mapping = new ExceptionHttpStatusCodeMapping();
-        $mapping->register(\RuntimeException::class, $expected);
+        $mapping = new ExceptionToHttpStatusCodeMapping(
+            new InvalidArgumentExceptionToHttpStatusCodeStrategy()
+        );
 
-        $statusCode = $mapping->handle(new \RuntimeException());
+        $statusCode = $mapping->handle(new InvalidArgumentException());
 
         self::assertSame($expected, $statusCode);
     }
 
     public function test_must_handle_unregistered_exception(): void
     {
-        $mapping = new ExceptionHttpStatusCodeMapping();
+        $mapping = new ExceptionToHttpStatusCodeMapping();
 
         $statusCode = $mapping->handle(new \RuntimeException());
 
@@ -34,7 +37,7 @@ final class ExceptionHttpStatusCodeMappingTest extends TestCase
 
     public function test_must_handle_http_exception(): void
     {
-        $mapping = new ExceptionHttpStatusCodeMapping();
+        $mapping = new ExceptionToHttpStatusCodeMapping();
 
         $statusCode = $mapping->handle(new ConflictHttpException());
 

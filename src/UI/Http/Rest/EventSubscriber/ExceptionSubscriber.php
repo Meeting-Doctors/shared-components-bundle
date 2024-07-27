@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SharedBundle\UI\Http\Rest\EventSubscriber;
 
-use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
+use SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Exception\ExceptionMessageTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +18,7 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface
 
     public function __construct(
         private bool $debug,
-        private ExceptionHttpStatusCodeMapping $exceptionHttpStatusCodeMapping
+        private ExceptionToHttpStatusCodeMapping $exceptionHttpStatusCodeMapping
     ) {
     }
 

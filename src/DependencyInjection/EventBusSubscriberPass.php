@@ -25,7 +25,7 @@ final class EventBusSubscriberPass implements CompilerPassInterface
                     throw new \InvalidArgumentException(sprintf('Service "%s" must implement interface "%s".', $id, EventListenerInterface::class));
                 }
 
-                $def->addTag('messenger.message_handler', ['bus' => 'messenger.bus.event.async']);
+                $def->addTag('messenger.message_handler', ['bus' => 'messenger.bus.event']);
             }
         } catch (ServiceNotFoundException) {
         }

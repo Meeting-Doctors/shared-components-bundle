@@ -7,7 +7,6 @@ namespace SharedBundle\Tests\UI\Http\Rest\Controller;
 use Shared\CommandHandling\CommandBusInterface;
 use SharedBundle\Tests\Stubs\Testing\Command\ACommand;
 use SharedBundle\UI\Http\Rest\Controller\AbstractCommandController;
-use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,9 +24,8 @@ final class CommandControllerTest extends KernelTestCase
     public function test_must_handle_command(): void
     {
         $commandBus = self::getContainer()->get(CommandBusInterface::class);
-        $exceptionHttpStatusCodeMapping = self::getContainer()->get(ExceptionHttpStatusCodeMapping::class);
 
-        $controller = new CommandController($commandBus, $exceptionHttpStatusCodeMapping);
+        $controller = new CommandController($commandBus);
 
         $response = $controller->__invoke();
 
@@ -43,16 +41,4 @@ final readonly class CommandController extends AbstractCommandController
 
         return OpenApi::created();
     }
-
-    #[\Override]
-    protected function exceptions(): array
-    {
-        return [
-            CommandControllerException::class => 555,
-        ];
-    }
-}
-
-final class CommandControllerException extends \Exception
-{
 }

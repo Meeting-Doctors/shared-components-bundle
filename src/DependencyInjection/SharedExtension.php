@@ -71,7 +71,7 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
                             'handle_message',
                         ],
                     ],
-                    'messenger.bus.event.async' => [
+                    'messenger.bus.event' => [
                         'default-middleware' => [
                             'enabled' => true,
                             'allow_no_handlers' => true,

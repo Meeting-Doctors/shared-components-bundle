@@ -46,7 +46,7 @@ final class EventBusSubscriberPassTest extends AbstractCompilerPassTestCase
             'event_listener',
             'messenger.message_handler',
             [
-                'bus' => 'messenger.bus.event.async',
+                'bus' => 'messenger.bus.event',
             ]
         );
     }

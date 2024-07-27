@@ -10,7 +10,6 @@ use Shared\CommandHandling\QueryBusInterface;
 use SharedBundle\Tests\Stubs\Testing\Command\ACommand;
 use SharedBundle\Tests\Stubs\Testing\Query\AnotherQuery;
 use SharedBundle\UI\Http\Rest\Controller\AbstractCommandQueryController;
-use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,9 +28,8 @@ final class CommandQueryControllerTest extends KernelTestCase
     {
         $commandBus = self::getContainer()->get(CommandBusInterface::class);
         $queryBus = self::getContainer()->get(QueryBusInterface::class);
-        $exceptionHttpStatusCodeMapping = self::getContainer()->get(ExceptionHttpStatusCodeMapping::class);
 
-        $controller = new CommandQueryController($commandBus, $queryBus, $exceptionHttpStatusCodeMapping);
+        $controller = new CommandQueryController($commandBus, $queryBus);
 
         $response = $controller->__invoke();
 
@@ -50,16 +48,4 @@ final readonly class CommandQueryController extends AbstractCommandQueryControll
 
         return $this->json($item);
     }
-
-    #[\Override]
-    protected function exceptions(): array
-    {
-        return [
-            CommandQueryControllerException::class => 555,
-        ];
-    }
-}
-
-final class CommandQueryControllerException extends \Exception
-{
 }

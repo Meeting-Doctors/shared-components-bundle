@@ -8,7 +8,6 @@ use Shared\CommandHandling\Collection;
 use Shared\CommandHandling\Item;
 use Shared\CommandHandling\QueryBusInterface;
 use Shared\CommandHandling\QueryInterface;
-use SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Response\OpenApi;
 
 abstract readonly class AbstractQueryController
@@ -17,14 +16,8 @@ abstract readonly class AbstractQueryController
 
     public function __construct(
         private QueryBusInterface $queryBus,
-        ExceptionHttpStatusCodeMapping $exceptionHttpStatusCodeMapping
     ) {
-        foreach ($this->exceptions() as $exception => $statusCode) {
-            $exceptionHttpStatusCodeMapping->register($exception, $statusCode);
-        }
     }
-
-    abstract protected function exceptions(): array;
 
     final protected function ask(QueryInterface $query): Item|Collection
     {

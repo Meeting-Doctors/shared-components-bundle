@@ -6,7 +6,7 @@
 >
     <services>
         <service id="Shared\EventHandling\EventBusInterface" class="SharedBundle\EventHandling\MessengerEventBus">
-            <argument type="service" id="messenger.bus.event.async"/>
+            <argument type="service" id="messenger.bus.event"/>
         </service>
 
         <service id="Shared\CommandHandling\CommandBusInterface" class="SharedBundle\CommandHandling\MessengerCommandBus">
@@ -41,7 +41,7 @@
 
         <service id="SharedBundle\UI\Http\Rest\EventSubscriber\ExceptionSubscriber">
             <argument>%env(APP_DEBUG)%</argument>
-            <argument type="service" id="SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping"/>
+            <argument type="service" id="SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping"/>
             <tag name="kernel.event_listener" event="kernel.exception"/>
         </service>
 
@@ -49,8 +49,21 @@
             <tag name="kernel.event_listener" event="kernel.request" priority="100"/>
         </service>
 
-        <service id="SharedBundle\UI\Http\Rest\Exception\ExceptionHttpStatusCodeMapping"/>
+        <service id="SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping"/>
+
+        <service id="SharedBundle\UI\Http\Rest\Exception\Strategy\AlreadyExistsExceptionToHttpStatusCodeStrategy">
+            <tag name="packages.shared.exception_subscriber.exception_to_http_status_code"/>
+        </service>
+
+        <service id="SharedBundle\UI\Http\Rest\Exception\Strategy\InvalidArgumentExceptionToHttpStatusCodeStrategy">
+            <tag name="packages.shared.exception_subscriber.exception_to_http_status_code"/>
+        </service>
+
+        <service id="SharedBundle\UI\Http\Rest\Exception\Strategy\NotFoundExceptionToHttpStatusCodeStrategy">
+            <tag name="packages.shared.exception_subscriber.exception_to_http_status_code"/>
+        </service>
     </services>
+
     <when env="test">
         <services>
             <service id="Shared\CommandHandling\CommandBusInterface" class="SharedBundle\CommandHandling\MessengerCommandBus" public="true">
