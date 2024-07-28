@@ -11,6 +11,8 @@ use SharedBundle\DBAL\Types\NotEmptyStringType;
 use SharedBundle\DBAL\Types\PlayheadType;
 use SharedBundle\DBAL\Types\SerializableType;
 use SharedBundle\DBAL\Types\UuidType;
+use SharedBundle\MongoDB\Doctrine\Type\ODM\NotEmptyStringType as ODMNotEmptyStringType;
+use SharedBundle\MongoDB\Doctrine\Type\ODM\UuidType as ODMUuidType;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -48,6 +50,13 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
                     PlayheadType::NAME => PlayheadType::class,
                 ],
             ],
+        ]);
+
+        $container->prependExtensionConfig('doctrine_mongodb', [
+            'types' => [
+                ODMNotEmptyStringType::NAME => ODMNotEmptyStringType::class,
+                ODMUuidType::NAME => ODMUuidType::class,
+            ]
         ]);
     }
 
