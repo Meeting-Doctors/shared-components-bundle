@@ -39,9 +39,9 @@
             <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
         </service>
 
-        <service id="SharedBundle\UI\Http\Rest\EventListener\ExceptionEventListener">
+        <service id="SharedBundle\UI\Http\Rest\EventSubscriber\ExceptionSubscriber">
             <argument type="service" id="SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping"/>
-            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException"/>
+            <tag name="kernel.event_listener" event="kernel.exception"/>
         </service>
 
         <service id="SharedBundle\UI\Http\Rest\EventSubscriber\JsonBodyParserSubscriber">

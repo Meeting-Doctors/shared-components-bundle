@@ -2,21 +2,31 @@
 
 declare(strict_types=1);
 
-namespace SharedBundle\UI\Http\Rest\EventListener;
+namespace SharedBundle\UI\Http\Rest\EventSubscriber;
 
 use SharedBundle\UI\Http\Rest\Exception\ExceptionMessageTrait;
 use SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-final readonly class ExceptionEventListener
+final readonly class ExceptionSubscriber implements EventSubscriberInterface
 {
     use ExceptionMessageTrait;
 
     public function __construct(
         private ExceptionToHttpStatusCodeMapping $exceptionHttpStatusCodeMapping
     ) {
+    }
+
+    #[\Override]
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::REQUEST => 'onKernelRequest',
+        ];
     }
 
     public function onKernelException(ExceptionEvent $event): void
