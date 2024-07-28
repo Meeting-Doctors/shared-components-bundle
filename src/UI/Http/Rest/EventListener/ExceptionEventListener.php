@@ -2,32 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SharedBundle\UI\Http\Rest\EventSubscriber;
+namespace SharedBundle\UI\Http\Rest\EventListener;
 
-use SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping;
 use SharedBundle\UI\Http\Rest\Exception\ExceptionMessageTrait;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
-final readonly class ExceptionSubscriber implements EventSubscriberInterface
+final readonly class ExceptionEventListener
 {
     use ExceptionMessageTrait;
 
     public function __construct(
-        private bool $debug,
         private ExceptionToHttpStatusCodeMapping $exceptionHttpStatusCodeMapping
     ) {
-    }
-
-    #[\Override]
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::EXCEPTION => 'onKernelException',
-        ];
     }
 
     public function onKernelException(ExceptionEvent $event): void
@@ -60,10 +49,6 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface
     private function errorMessage(\Throwable $exception): array
     {
         $error = $this->error($exception);
-
-        if (!$this->debug) {
-            return $error;
-        }
 
         return [...$error, ...$this->metadata($exception)];
     }

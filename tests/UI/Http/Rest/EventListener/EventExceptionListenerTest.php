@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SharedBundle\Tests\UI\Http\Rest\EventSubscriber;
+namespace SharedBundle\Tests\UI\Http\Rest\EventListener;
 
 use SharedBundle\UI\Http\Rest\Response\OpenApi;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class ExceptionSubscriberTest extends KernelTestCase
+final class EventExceptionListenerTest extends KernelTestCase
 {
     #[\Override]
     protected function setUp(): void
