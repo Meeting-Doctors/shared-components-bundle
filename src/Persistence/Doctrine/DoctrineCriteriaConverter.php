@@ -11,6 +11,8 @@ use SharedBundle\Criteria\CriteriaConverterException;
 
 final readonly class DoctrineCriteriaConverter
 {
+    private const int DEFAULT_OFFSET = 0;
+
     /**
      * @throws CriteriaConverterException
      */
@@ -28,7 +30,7 @@ final readonly class DoctrineCriteriaConverter
         return new Doctrine\Criteria(
             $expression,
             $orderings,
-            $offset,
+            $offset ?? self::DEFAULT_OFFSET,
             $limit
         );
     }
