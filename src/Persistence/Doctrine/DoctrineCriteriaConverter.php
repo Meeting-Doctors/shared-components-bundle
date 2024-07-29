@@ -65,7 +65,7 @@ final readonly class DoctrineCriteriaConverter
 
         /** @var Criteria\Expr\Sort $order */
         foreach ($expr->expressions as $order) {
-            yield $order->field => $order->order->value;
+            yield $order->field => Doctrine\Order::from($order->order->value);
         }
     }
 }
