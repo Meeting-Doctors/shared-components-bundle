@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace SharedBundle\DBAL;
 
 use Doctrine\DBAL\Connection;
+use SharedBundle\HealthyConnection\HealthyConnectionInterface;
 
-final readonly class DBALHealthyConnection
+final readonly class DBALHealthyConnection implements HealthyConnectionInterface
 {
+    private const string NAME = 'mysql';
+
     public function __construct(
         private Connection $connection
     ) {
@@ -26,5 +29,10 @@ final readonly class DBALHealthyConnection
 
             return false;
         }
+    }
+
+    public function name(): string
+    {
+        return self::NAME;
     }
 }

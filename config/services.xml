@@ -39,6 +39,12 @@
             <argument type="service" id="doctrine_mongodb.odm.default_connection"/>
         </service>
 
+        <service id="SharedBundle\HealthyConnection\HealthyConnectionsService">
+            <argument type="service" id="SharedBundle\DBAL\DBALHealthyConnection"/>
+            <argument type="service" id="SharedBundle\MongoDB\MongoDBHealthyConnection"/>
+            <argument type="service" id="SharedBundle\AMQP\AMQPHealthyConnection"/>
+        </service>
+
         <service id="SharedBundle\UI\Http\Rest\EventSubscriber\ExceptionSubscriber">
             <argument type="service" id="SharedBundle\UI\Http\Rest\Exception\ExceptionToHttpStatusCodeMapping"/>
             <tag name="kernel.event_listener" event="kernel.exception"/>

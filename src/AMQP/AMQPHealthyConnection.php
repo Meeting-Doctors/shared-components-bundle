@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SharedBundle\AMQP;
 
+use SharedBundle\HealthyConnection\HealthyConnectionInterface;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\Connection;
 
-final readonly class AMQPHealthyConnection
+final readonly class AMQPHealthyConnection implements HealthyConnectionInterface
 {
+    private const string NAME = 'rabbitmq';
+
     private Connection $connection;
 
     public function __construct(
@@ -27,5 +30,10 @@ final readonly class AMQPHealthyConnection
         } catch (\Throwable) {
             return false;
         }
+    }
+
+    public function name(): string
+    {
+        return self::NAME;
     }
 }

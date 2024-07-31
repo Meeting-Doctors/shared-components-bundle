@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace SharedBundle\MongoDB;
 
 use MongoDB\Client;
+use SharedBundle\HealthyConnection\HealthyConnectionInterface;
 
-class MongoDBHealthyConnection
+class MongoDBHealthyConnection implements HealthyConnectionInterface
 {
+    private const string NAME = 'mongodb';
+
     public function __construct(private readonly Client $client)
     {
     }
@@ -21,5 +24,10 @@ class MongoDBHealthyConnection
         } catch (\Throwable) {
             return false;
         }
+    }
+
+    public function name(): string
+    {
+        return self::NAME;
     }
 }
