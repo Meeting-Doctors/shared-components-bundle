@@ -4,13 +4,6 @@ declare(strict_types=1);
 
 namespace SharedBundle\DependencyInjection;
 
-use SharedBundle\DBAL\Types\DateTimeImmutableType;
-use SharedBundle\DBAL\Types\EmailType;
-use SharedBundle\DBAL\Types\HashedPasswordType;
-use SharedBundle\DBAL\Types\NotEmptyStringType;
-use SharedBundle\DBAL\Types\PlayheadType;
-use SharedBundle\DBAL\Types\SerializableType;
-use SharedBundle\DBAL\Types\UuidType;
 use SharedBundle\MongoDB\Doctrine\Type\ODM\NotEmptyStringType as ODMNotEmptyStringType;
 use SharedBundle\MongoDB\Doctrine\Type\ODM\UuidType as ODMUuidType;
 use Symfony\Component\Config\FileLocator;
@@ -38,20 +31,6 @@ final class SharedExtension extends Extension implements PrependExtensionInterfa
 
     private function prependDoctrineConfig(ContainerBuilder $container): void
     {
-        $container->prependExtensionConfig('doctrine', [
-            'dbal' => [
-                'types' => [
-                    DateTimeImmutableType::NAME => DateTimeImmutableType::class,
-                    EmailType::NAME => EmailType::class,
-                    HashedPasswordType::NAME => HashedPasswordType::class,
-                    NotEmptyStringType::NAME => NotEmptyStringType::class,
-                    SerializableType::NAME => SerializableType::class,
-                    UuidType::NAME => UuidType::class,
-                    PlayheadType::NAME => PlayheadType::class,
-                ],
-            ],
-        ]);
-
         $container->prependExtensionConfig('doctrine_mongodb', [
             'types' => [
                 ODMNotEmptyStringType::NAME => ODMNotEmptyStringType::class,
