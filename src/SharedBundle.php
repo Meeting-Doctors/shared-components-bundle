@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SharedBundle;
 
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use SharedBundle\DependencyInjection\EventBusSubscriberPass;
 use SharedBundle\DependencyInjection\ExceptionToHttpStatusCodeStrategyPass;
 use SharedBundle\DependencyInjection\SharedExtension;
@@ -21,15 +20,6 @@ final class SharedBundle extends AbstractBundle
 
         $container->addCompilerPass(new EventBusSubscriberPass());
         $container->addCompilerPass(new ExceptionToHttpStatusCodeStrategyPass());
-
-        $this->addRegisterMappingsPass($container);
-    }
-
-    private function addRegisterMappingsPass(ContainerBuilder $container): void
-    {
-        $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver([
-            realpath(__DIR__.'/../config/packages/doctrine/mapping') => 'Shared\Domain',
-        ]));
     }
 
     #[\Override]
