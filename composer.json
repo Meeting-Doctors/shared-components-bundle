@@ -14,7 +14,8 @@
         "meetingdoctors/shared": "dev-master",
         "doctrine/mongodb-odm": "^2.8",
         "doctrine/mongodb-odm-bundle": "^5.0",
-        "doctrine/doctrine-migrations-bundle": "^3.3"
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^3.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.49",
