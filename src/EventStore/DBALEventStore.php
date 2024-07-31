@@ -24,10 +24,12 @@ use SharedBundle\Criteria\CriteriaConverterException;
 
 final readonly class DBALEventStore implements EventStoreInterface, EventStoreManagerInterface
 {
+    private const string DATETIME_FORMAT = 'Y-m-d H:i:s.u';
+
     public const string TABLE_NAME = 'domain_events';
     public const string TABLE_SCHEMA = 'CREATE TABLE IF NOT EXISTS `'.self::TABLE_NAME.'` (
-        `id` VARCHAR(36) NOT NULL COLLATE utf8mb4_general_ci,
-        `aggregate_id` VARCHAR(36) NOT NULL COLLATE utf8mb4_general_ci,
+        `id` VARBINARY(16) NOT NULL,
+        `aggregate_id` VARBINARY(16),
         `playhead` INT(10) UNSIGNED NOT NULL,
         `event_class` VARCHAR(255) NOT NULL COLLATE utf8mb4_general_ci,
         `payload` LONGTEXT NOT NULL COLLATE utf8mb4_general_ci,
@@ -71,7 +73,7 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
         $results = $this->connection->fetchAllAssociative(
             self::SQL_GET,
             [
-                'aggregate_id' => $id->uuid,
+                'aggregate_id' => $this->uuidToVarBinary($id),
             ],
             [
                 'aggregate_id' => Types::STRING,
@@ -97,13 +99,13 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
                 $this->connection->insert(
                     self::TABLE_NAME,
                     [
-                        'id' => $event->id()->uuid,
-                        'aggregate_id' => $event->aggregateId()->uuid,
+                        'id' => $this->uuidToVarBinary($event->id()),
+                        'aggregate_id' => $this->uuidToVarBinary($event->aggregateId()),
                         'event_class' => $event::class,
                         'payload' => json_encode(Serializer::serialize($event->payload()), JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION),
                         'playhead' => $event->playHead()->value,
                         'metadata' => json_encode(Serializer::serialize($event->metadata()), JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION),
-                        'recorded_at' => $event->recordedAt()->dateTime,
+                        'recorded_at' => $event->recordedAt()->format(self::DATETIME_FORMAT),
                     ],
                 );
             } catch (ConstraintViolationException) {
@@ -123,7 +125,7 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
         $results = $this->connection->fetchAllAssociative(
             self::SQL_GET,
             [
-                'aggregate_id' => $aggregateId->uuid,
+                'aggregate_id' => $this->uuidToVarBinary($aggregateId),
             ],
             [
                 'aggregate_id' => Types::STRING,
@@ -142,7 +144,7 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
         $results = $this->connection->fetchAllAssociative(
             self::SQL_GET_WITH_PLAYHEAD,
             [
-                'aggregate_id' => $id->uuid,
+                'aggregate_id' => $this->uuidToVarBinary($id),
                 'playhead' => $playhead,
             ],
             [
@@ -167,12 +169,33 @@ final readonly class DBALEventStore implements EventStoreInterface, EventStoreMa
         $class = $data['event_class'];
 
         return new $class(
-            new Uuid($data['aggregate_id']),
+            $this->varBinaryToUuid($data['aggregate_id']),
             Serializer::deserialize(json_decode($data['payload'], true, 512, JSON_THROW_ON_ERROR)),
             new Playhead($data['playhead']),
-            new DateTimeImmutable(date(DATE_ATOM, strtotime($data['recorded_at']))),
+            DateTimeImmutable::fromFormat(self::DATETIME_FORMAT, $data['recorded_at']),
             Serializer::deserialize(json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR)),
-            new Uuid($data['id']),
+            $this->varBinaryToUuid($data['id']),
         );
+    }
+
+    private function uuidToVarBinary(Uuid $uuid): string
+    {
+        return hex2bin(str_replace('-', '', $uuid->uuid));
+    }
+
+    private function varBinaryToUuid(string $string): Uuid
+    {
+        $uuid = bin2hex($string);
+
+        $value = sprintf(
+            '%s-%s-%s-%s-%s',
+            substr($uuid, 0, 8),
+            substr($uuid, 8, 4),
+            substr($uuid, 12, 4),
+            substr($uuid, 16, 4),
+            substr($uuid, 20)
+        );
+
+        return new Uuid($value);
     }
 }
